@@ -31,6 +31,11 @@ function loadConfig() {
     const next = typeof value === "string" ? value.trim() : "";
     return next || fallback;
   };
+  const cleanOptional = (value: string | undefined) => {
+    const next = typeof value === "string" ? value.trim() : "";
+    if (!next) return null;
+    return clean(next);
+  };
 
   return {
     retell: {
@@ -52,6 +57,7 @@ function loadConfig() {
       apiKey: clean(result.data.RESEND_API_KEY),
       fromEmail: result.data.RESEND_FROM_EMAIL.trim(),
       fromName: cleanOrFallback(result.data.RESEND_FROM_NAME, "Adam at God's Cleaning Crew"),
+      webhookSecret: cleanOptional(result.data.RESEND_WEBHOOK_SECRET),
       replyToEmail:
         cleanOrFallback(
           result.data.RESEND_REPLY_TO_EMAIL,
@@ -63,6 +69,11 @@ function loadConfig() {
     app: {
       url: result.data.NEXT_PUBLIC_APP_URL.trim(),
       internalSecret: clean(result.data.INTERNAL_API_SECRET),
+      cronSecret: cleanOptional(result.data.CRON_SECRET),
+      dashboardBasicUser: cleanOptional(result.data.DASHBOARD_BASIC_USER),
+      dashboardBasicPass: cleanOptional(result.data.DASHBOARD_BASIC_PASS),
+      vercelUrl: cleanOptional(result.data.VERCEL_URL),
+      env: cleanOrFallback(result.data.NODE_ENV, "development"),
     },
   } as const;
 }

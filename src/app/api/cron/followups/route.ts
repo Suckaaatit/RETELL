@@ -21,8 +21,8 @@ export async function GET(req: NextRequest) {
   try {
     // ---- Auth: Verify Vercel cron secret ----
     const authHeader = req.headers.get('authorization');
-    const cronSecret = process.env.CRON_SECRET;
-    if (process.env.NODE_ENV === 'production' && !cronSecret) {
+    const cronSecret = config.app.cronSecret;
+    if (config.app.env === 'production' && !cronSecret) {
       logError('Cron followups: CRON_SECRET missing in production', new Error('Missing CRON_SECRET'));
       return NextResponse.json({ error: 'Server misconfiguration' }, { status: 500 });
     }

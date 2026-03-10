@@ -15,12 +15,18 @@ export const EnvSchema = z.object({
   STRIPE_LINK_1100: z.string().url('STRIPE_LINK_1100 must be a valid URL'),
   RESEND_API_KEY: z.string().min(1, 'RESEND_API_KEY is required'),
   RESEND_FROM_EMAIL: z.string().email('RESEND_FROM_EMAIL must be a valid email'),
+  RESEND_WEBHOOK_SECRET: z.string().optional().or(z.literal('')),
   RESEND_FROM_NAME: z.string().optional().or(z.literal('')),
   RESEND_REPLY_TO_EMAIL: z.string().email('RESEND_REPLY_TO_EMAIL must be a valid email').optional().or(z.literal('')),
   BUSINESS_PHONE_NUMBER: z.string().optional().or(z.literal('')),
   BUSINESS_WEBSITE_URL: z.string().url('BUSINESS_WEBSITE_URL must be a valid URL').optional().or(z.literal('')),
   NEXT_PUBLIC_APP_URL: z.string().url('NEXT_PUBLIC_APP_URL must be a valid URL'),
   INTERNAL_API_SECRET: z.string().min(16, 'INTERNAL_API_SECRET must be at least 16 characters'),
+  CRON_SECRET: z.string().optional().or(z.literal('')),
+  DASHBOARD_BASIC_USER: z.string().optional().or(z.literal('')),
+  DASHBOARD_BASIC_PASS: z.string().optional().or(z.literal('')),
+  VERCEL_URL: z.string().optional().or(z.literal('')),
+  NODE_ENV: z.string().optional().or(z.literal('')),
 });
 
 export type EnvConfig = z.infer<typeof EnvSchema>;

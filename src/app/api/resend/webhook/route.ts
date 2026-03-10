@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { ResendWebhookSchema } from '@/types';
 import type { ResendWebhookPayload } from '@/types';
 import { logInfo, logWarn, logError } from '@/lib/logger';
+import { config } from '@/lib/config';
 
 export const maxDuration = 60;
 
@@ -20,7 +21,7 @@ export const maxDuration = 60;
 export async function POST(req: NextRequest) {
   try {
     const incoming = req.headers.get("x-webhook-secret");
-    const expected = process.env.RESEND_WEBHOOK_SECRET;
+    const expected = config.resend.webhookSecret;
     if (expected && incoming !== expected) {
       logWarn("Resend webhook: invalid secret");
       return NextResponse.json({ ok: true });

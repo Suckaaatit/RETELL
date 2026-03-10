@@ -223,8 +223,8 @@ async function handleSendPaymentEmail(
 
 function fireBackgroundPayment(payload: ProcessPaymentPayload): void {
   const url = `${config.app.url}/api/internal/process-payment`;
-  const dashboardUser = process.env.DASHBOARD_BASIC_USER?.trim();
-  const dashboardPass = process.env.DASHBOARD_BASIC_PASS?.trim() ?? '';
+  const dashboardUser = config.app.dashboardBasicUser || '';
+  const dashboardPass = config.app.dashboardBasicPass || '';
   const basicAuth =
     dashboardUser && dashboardUser.length > 0
       ? `Basic ${Buffer.from(`${dashboardUser}:${dashboardPass}`).toString('base64')}`

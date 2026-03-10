@@ -49,8 +49,10 @@ export async function POST(req: NextRequest) {
 
     const { email } = body;
     const { plan_tier, plan_label } = body;
-    console.log('[SEND EMAIL] Args:', {
-      email,
+    logInfo('process-payment: email payload prepared', {
+      callId,
+      prospectId,
+      email: maskEmail(email),
       plan_tier,
       prospect_name: body.prospect_name || null,
       company_name: body.company_name || null,
@@ -84,7 +86,12 @@ export async function POST(req: NextRequest) {
       (selectedPlanTier === 'two_incident'
         ? 'Annual Biohazard Response - 2 Incident Coverage'
         : 'Annual Biohazard Response - 1 Incident Coverage');
-    console.log('[SEND EMAIL] Using payment link:', paymentLink);
+    logInfo('process-payment: payment link selected', {
+      callId,
+      prospectId,
+      plan_tier: selectedPlanTier,
+      paymentLink,
+    });
 
     // ---- IDEMPOTENCY CHECK ----
     // If the same call was already processed, skip. If partially processed, resume safely.
@@ -140,7 +147,12 @@ export async function POST(req: NextRequest) {
             websiteUrl: config.resend.businessWebsite,
           }),
         });
-        console.log('[SEND EMAIL] Resend result:', JSON.stringify(emailResult));
+        logInfo('process-payment: resend response received', {
+          callId,
+          prospectId,
+          resendMessageId: emailResult.data?.id || null,
+          resendError: emailResult.error ? true : false,
+        });
 
         if (emailResult.error) {
           logError('process-payment: Resend email send failed', new Error(JSON.stringify(emailResult.error)), {
@@ -347,4 +359,13 @@ function escapeHtml(value: string): string {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
+}
+
+function maskEmail(value: string): string {
+  if (!value) return '';
+  const parts = value.split('@');
+  if (parts.length !== 2) return value;
+  const [user, domain] = parts;
+  if (user.length <= 2) return `**@${domain}`;
+  return `${user.slice(0, 2)}***@${domain}`;
 }

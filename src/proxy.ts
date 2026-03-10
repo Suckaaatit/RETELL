@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { config as appConfig } from "@/lib/config";
 
 function unauthorizedResponse() {
   return new NextResponse("Unauthorized", {
@@ -13,7 +14,7 @@ export function proxy(req: NextRequest) {
   // Dashboard and internal routes are intentionally public in this setup.
   // Only cron endpoint optionally enforces bearer secret.
   if (isCronRoute) {
-    const cronSecret = process.env.CRON_SECRET?.trim();
+    const cronSecret = appConfig.app.cronSecret;
     if (cronSecret) {
       const authHeader = req.headers.get("authorization") || "";
       if (authHeader === `Bearer ${cronSecret}`) {

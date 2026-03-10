@@ -78,7 +78,7 @@ export default function VoiceTester() {
       </div>
 
       <div className="rounded-xl border border-[var(--line)] bg-[rgba(255,255,255,0.02)] p-4 text-xs text-[var(--text-muted)]">
-        Browser test calls were removed with the Vapi migration. Run live validation by dialing from
+        Browser test calls are disabled in this build. Run live validation by dialing from
         <span className="mx-1 text-white">Dashboard → Prospects → Call Now</span>
         or by executing
         <span className="mx-1 text-white" data-mono="true">
