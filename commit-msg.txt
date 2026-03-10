@@ -1,1 +1,0 @@
-QA audit fixes: remove console logs, centralize env access, and tidy text
